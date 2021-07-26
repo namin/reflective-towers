@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+
+cat $2 $1 >hout.scm
+read -r headline <hout.scm
+tail -n +2 hout.scm >out.scm
+
+echo "(load-option 'format)" >format.scm
+
+case "$headline" in
+    black)
+        mechanics-shell --load format.scm --load black/init.scm <out.scm | tail -n +15
+        ;;
+    blond)
+        mechanics-shell --load format.scm --load blond/mit.scm --load blond.scm <out.scm | tail -n +15
+    brown)
+        cat brown/lib.brn out.scm >out.brn
+        mechanics-shell --load format.scm --load brown/brown.scm --load brown/boot.scm <out.brn | tail -n +13
+        ;;
+    *)
+        echo "error: unknown headline $headline"
+        ;;
+esac
