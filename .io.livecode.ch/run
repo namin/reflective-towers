@@ -11,11 +11,11 @@ echo "(load-option 'format)" >format.scm
 case "$headline" in
     black)
         cd black
-        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n +15
+        mit-scheme --load ../format.scm --load init.scm <../out.scm | tail -n +15
         ;;
     blond)
         cd blond
-        mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | tail -n +15
+        mit-scheme --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | tail -n +15
         ;;
     brown)
         cd brown
