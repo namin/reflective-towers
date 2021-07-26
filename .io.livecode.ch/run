@@ -14,6 +14,7 @@ case "$headline" in
         ;;
     blond)
         mechanics-shell --load format.scm --load blond/mit.scm --load blond.scm <out.scm | tail -n +15
+        ;;
     brown)
         cat brown/lib.brn out.scm >out.brn
         mechanics-shell --load format.scm --load brown/brown.scm --load brown/boot.scm <out.brn | tail -n +13
