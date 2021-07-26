@@ -19,7 +19,7 @@ case "$headline" in
         ;;
     brown)
         cd brown
-        cat lib.brn out.scm >out.brn
+        cat lib.brn ../out.scm >out.brn
         scheme brown.scm boot.scm <out.brn | tail -n +13
         ;;
     *)
