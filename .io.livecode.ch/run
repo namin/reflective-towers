@@ -5,13 +5,17 @@ set -e
 cat $2 $1 >hout.scm
 read -r headline <hout.scm
 tail -n +2 hout.scm >out.scm
+tail -n +2 $2 >lib.scm
 
 echo "(load-option 'format)" >format.scm
 
 case "$headline" in
     black)
         cd black
-        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n +15
+        mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+        n=`wc -l <lib.txt | xargs`
+        n=$(expr $n - 6)
+        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n"
         ;;
     blond)
         cd blond
