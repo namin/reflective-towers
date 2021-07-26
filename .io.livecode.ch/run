@@ -15,7 +15,9 @@ case "$headline" in
         mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
         n=`wc -l <lib.txt | xargs`
         n=$(expr $n - 2)
-        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2
+        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" >out.txt | head -n-2
+        perl -pi -e 's/(\d-\d+:)/\n$1/g' out.txt
+        cat out.txt
         ;;
     blond)
         cd blond
