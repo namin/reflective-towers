@@ -10,14 +10,17 @@ echo "(load-option 'format)" >format.scm
 
 case "$headline" in
     black)
-        mechanics-shell --load format.scm --load black/init.scm <out.scm | tail -n +15
+        cd black
+        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n +15
         ;;
     blond)
-        mechanics-shell --load format.scm --load blond/mit.scm --load blond.scm <out.scm | tail -n +15
+        cd blond
+        mechanics-shell --load ../format.scm --load mit.scm --load blond.scm <../out.scm | tail -n +15
         ;;
     brown)
-        cat brown/lib.brn out.scm >out.brn
-        mechanics-shell --load format.scm --load brown/brown.scm --load brown/boot.scm <out.brn | tail -n +13
+        cd brown
+        cat lib.brn ../out.scm >out.brn
+        mechanics-shell --load ../format.scm --load brown.scm --load boot.scm <out.brn | tail -n +13
         ;;
     *)
         echo "error: unknown headline $headline"
