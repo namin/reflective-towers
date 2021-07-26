@@ -15,14 +15,14 @@ case "$headline" in
         mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
         n=`wc -l <lib.txt | xargs`
         n=$(expr $n - 2)
-        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n"
+        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2
         ;;
     blond)
         cd blond
         mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
         n=`wc -l <lib.txt | xargs`
         n=$(expr $n - 2)
-        mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | tail -n "+$n"
+        mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | tail -n "+$n" | head -n-2
         ;;
     brown)
         cd brown
