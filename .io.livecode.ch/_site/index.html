@@ -5,34 +5,29 @@
 {% block content %}
 <h2>Lib</h2>
 
-<div class="live" id="lib" data-lib="">
+<div class="live" id="black" data-lib="">
 black
 
 </div>
 
-<h2>REPL</h2>
-
-<div class="live" id="play" data-lib="lib">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="live" id="s1" data-lib="black">
+  (define foo (lambda (f) (lambda (x) (lambda () (f (+ x 1))))))
+  (define thunk ((foo 1) 2))
+  (thunk)
 </div>
 
-<p>Happy Happy Joy Joy!</p>
+<div class="live" id="s2" data-lib="black s1">
+  (old-cont 'ok)
+</div>
+
+<div class="live" id="s3" data-lib="black s1 s2">
+  (EM (load "break.blk"))
+  (inspect thunk)
+  f
+  (set! f (lambda (x) (+ x 2)))
+  (exit 'done)
+  (thunk)
+  (thunk)
+</div>
 
 {% endblock %}
