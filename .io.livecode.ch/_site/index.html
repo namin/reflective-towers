@@ -37,7 +37,11 @@ black
   (define thunk2 ((foo 2) 3))
   (thunk2)
   (old-cont 'ok)
-  (EM (load "examples/multn.blk"))
+</div>
+<div class="live" id="s5" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close">
+  ;; (EM (load "examples/multn.blk"))
+</div>
+<div class="live" id="s6" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close s5">
   (thunk2)
   (1 2 3 4)
 </div>
@@ -48,6 +52,18 @@ black
 
 <div class="live hidden" id="em-close" data-lib="black">
   ))
+</div>
+
+<h3>multn.blk</h3>
+<div class="live" id="lib-multn" data-lib="black">
+  (let ((original-base-apply base-apply))
+  (set! base-apply
+    (lambda (operator operand env cont)
+      (cond ((number? operator)
+             (base-eval (cons '* (cons operator operand)) env cont))
+            (else
+             (original-base-apply operator operand env cont))))))
+
 </div>
 
 <h3>break.blk</h3>
