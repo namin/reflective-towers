@@ -24,7 +24,7 @@ black
 ;;  (EM (load "break.blk"))
 </div>
 
-<div class="live" id="s3" data-lib="black s1 s2">
+<div class="live" id="s3" data-lib="black s1 s2 em-open lib-break em-close s3-1">
   (inspect thunk)
   f
   (set! f (lambda (x) (+ x 2)))
@@ -33,7 +33,7 @@ black
   (thunk)
 </div>
 
-<div class="live" id="s4" data-lib="black s1 s2 s3">
+<div class="live" id="s4" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3">
   (define thunk2 ((foo 2) 3))
   (thunk2)
   (old-cont 'ok)
