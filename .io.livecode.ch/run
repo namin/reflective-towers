@@ -13,10 +13,16 @@ echo "(load-option 'format)" >format.scm
 case "${headline[0]}" in
     black)
         cd black
-        mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
-        n=`wc -l <lib.txt | xargs`
-        n=$(expr $n - 2)
-        mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
+        case "${headline[1]}$" in
+            full)
+                mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
+            ;;
+            *)
+                mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+                n=`wc -l <lib.txt | xargs`
+                n=$(expr $n - 2)
+                mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
+                ;;
         perl -pi -e 's/(\d-\d+:)/\n$1/g' out.txt
         cat out.txt
         ;;
