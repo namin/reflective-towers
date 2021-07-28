@@ -42,7 +42,7 @@ black
 <h2>Blond Walkthrough: Tower Semantic Pitfalls</h2>
 
 <div class="live" id="blond" data-lib="">
-black
+blond
 
 </div>
 
@@ -60,19 +60,12 @@ black
                k))))
 </div>
 
-<div class="live" id="t3" data-lib="blond t1">
-((delta (e r k)
-   (define re-enter
-     (lambda (v)
-       ((pushify k) ((r 're-enter) v))))))
-</div>
-
-<div class="live" id="t4" data-lib="blond t2">
+<div class="live" id="t4" data-lib="blond t1 t2">
   (exit 'up)
   (re-enter 'ok)
 </div>
 
-<div class="live" id="t5" data-lib="blond t2 t4">
+<div class="live" id="t5" data-lib="blond t1 t2 t4">
   1
   2
   3
@@ -80,25 +73,32 @@ black
   (re-enter 'ok)
 </div>
 
-<div class="live" id="t6" data-lib="blond t2 t4 t5">
+<div class="live" id="t6" data-lib="blond t1 t2 t4 t5">
   1
   2
   3
   (jump 'ok)
 </div>
 
-<div class="live" id="t7" data-lib="blond t2 t4 t5 t6">
+<div class="live" id="t7" data-lib="blond t1 t2 t4 t5 t6">
   (exit 'up)
 </div>
 
-<div class="live" id="t8" data-lib="blond t2 t4 t5 t6 t7 t3 t3">
+<div class="live" id="t3" data-lib="blond t1 t2">
+((delta (e r k)
+   (define re-enter
+     (lambda (v)
+       ((pushify k) ((r 're-enter) v))))))
 </div>
 
-<div class="live" id="t9" data-lib="blond t2 t4 t5 t6 t7 t3 t3 t8">
+<div class="live" id="t8" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3">
+</div>
+
+<div class="live" id="t9" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8">
   (re-enter 'ok)
 </div>
 
-<div class="live" id="t10" data-lib="blond t2 t4 t5 t6 t7 t3 t3 t8 t9">
+<div class="live" id="t10" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8 t9">
   (exit 'up)
   (exit 'up)
   (exit 'up)
