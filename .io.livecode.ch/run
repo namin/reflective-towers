@@ -32,15 +32,18 @@ case "${headline[0]}" in
         case "${headline[1]}" in
             full)
                 mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm >out.txt
+                perl -pi -e 's/(\d-\d+[>:])/\n$1/g' out.txt
                 ;;
             *)
                 mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
+                perl -pi -e 's/(\d-\d+[>:])/\n$1/g' lib.txt
                 n=`wc -l <lib.txt | xargs`
                 n=$(expr $n - 2)
-                mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
+                mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm >full.txt
+                perl -pi -e 's/(\d-\d+[>:])/\n$1/g' full.txt
+                cat full.txt | tail -n "+$n" | head -n-2 >out.txt
                 ;;
         esac
-        perl -pi -e 's/(\d-\d+[>:])/\n$1/g' out.txt
         cat out.txt
         ;;
     brown)
