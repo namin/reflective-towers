@@ -13,7 +13,7 @@ echo "(load-option 'format)" >format.scm
 case "${headline[0]}" in
     black)
         cd black
-        case "${headline[1]}$" in
+        case "${headline[1]}" in
             full)
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
             ;;
