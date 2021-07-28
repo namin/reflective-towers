@@ -37,7 +37,7 @@ case "${headline[0]}" in
                 mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
                 n=`wc -l <lib.txt | xargs`
                 echo "n is $n"
-                cat lib.scm
+                cat ../lib.scm
                 echo "---"
                 cat lib.txt
                 echo "---"
