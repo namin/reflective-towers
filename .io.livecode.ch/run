@@ -34,6 +34,7 @@ case "${headline[0]}" in
         case "${headline[1]}" in
             full)
                 cp full.txt out.txt
+                ;;
             *)
                 mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
                 perl -pi -e 's/(\d-\d+[>:])/\n$1/g' lib.txt
