@@ -10,7 +10,7 @@ tail -n +2 $2 >lib.scm
 
 echo "(load-option 'format)" >format.scm
 
-case "${headline[1]}" in
+case "${headline[0]}" in
     black)
         cd black
         mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
