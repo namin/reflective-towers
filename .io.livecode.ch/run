@@ -23,6 +23,7 @@ case "${headline[0]}" in
                 n=$(expr $n - 2)
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
                 ;;
+        esac
         perl -pi -e 's/(\d-\d+:)/\n$1/g' out.txt
         cat out.txt
         ;;
