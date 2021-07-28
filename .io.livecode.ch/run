@@ -31,7 +31,7 @@ case "${headline[0]}" in
         cd blond
         case "${headline[1]}" in
             full)
-                mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm | >out.txt
+                mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm >out.txt
                 ;;
             *)
                 mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
