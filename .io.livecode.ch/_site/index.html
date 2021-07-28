@@ -3,7 +3,7 @@
 {% block title %}Reflective Towers of Interpreters{% endblock %}
 
 {% block content %}
-<h2>Lib</h2>
+<h2>Black Walkthrough: Debugging</h2>
 
 <div class="live" id="black" data-lib="">
 black
@@ -30,4 +30,12 @@ black
   (thunk)
 </div>
 
+<div class="live" id="s4" data-lib="black s1 s2 s3">
+  (define thunk2 ((foo 2) 3))
+  (thunk2)
+  (old-cont 'ok)
+  (EM (load "examples/multn.blk"))
+  (thunk2)
+  (1 2 3 4)
+</div>
 {% endblock %}
