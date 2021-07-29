@@ -88,7 +88,7 @@ black
   (base-eval closure env (lambda (closure)
   (let ((lambda-env (car (cdr (cdr (cdr closure))))))
    (let ((result (loop "inspect" lambda-env 'inspect-loop)))
-      (write 'inspect-end)(newline)
+      (newline)(write 'inspect-end)(newline)
       (cont result))))))
 
 (let ((original-eval-application eval-application))
