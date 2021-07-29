@@ -28,25 +28,35 @@ We consider the design choices mostly common to all reflective towers.</p>
 
 <h2><a id="black-walkthrough"></a>Black Walkthrough: Debugging</h2>
 
+<p>We start the Black REPL. Two levels are loaded: the meta level and the meta meta level, because Black needs to look up the meta functions in the meta meta environment even though the meta level is unmodified.</p>
 <div class="live" id="black" data-lib="">
 black
 
 </div>
 
+<p>We define a function `foo` and create a thunk out of its application.
+There is an error, so control passes to the meta level (`1-` from `0-` in the prompt).<br/>
+A new level is loaded for the meta meta meta level.</p>
 <div class="live" id="s1" data-lib="black">
   (define foo (lambda (f) (lambda (x) (lambda () (f (+ x 1))))))
   (define thunk ((foo 1) 2))
   (thunk)
 </div>
 
+<p>We can use the old continuation to jump back to the level below (here the user level). Since the application is at fault, and there are no pending computations, we can just return any value with the continuation.</p>
 <div class="live" id="s2" data-lib="black s1">
   (old-cont 'ok)
 </div>
 
+<p>Now what are our options to fix this error? One option is to fiddle with the thunk and change the value of `f` in its closure to be a function.
+We load some Black code (nothing special) to get an inspector of closure environments.
+This code is loaded at the meta level, as indicated by `EM`, a shorthand for `exec-at-metalevel`.</p>
 <div class="live" id="s3-1" data-lib="black s1 s2 em-open lib-break em-close">
 ;;  (EM (load "break.blk"))
 </div>
 
+<p>We get a REPL to inspect and modify this environment.
+When we exit that REPL, we go back to the level above (here the user level).</p>
 <div class="live" id="s3" data-lib="black s1 s2 em-open lib-break em-close s3-1">
   (inspect thunk)
   f
@@ -56,6 +66,8 @@ black
   (thunk)
 </div>
 
+<p>Another option is defining application of numbers so that it multiplies all the numbers together instead of returning an error.<br/>
+We load some Black code (again nothing special) at the meta level to re-define the behavior.</p>
 <div class="live" id="s4" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3">
   (define thunk2 ((foo 2) 3))
   (thunk2)
@@ -77,7 +89,15 @@ black
   ))
 </div>
 
+<p>What does the Black code to create those inspection and modification look like?
+Let's start with the code to re-define application of numbers.</p>
+
 <h3>multn.blk</h3>
+<p>This code is to be loaded from the meta level.
+The Black meta level defines the interpreter piece-wise.
+There is a `base-apply` function that handles applying an operator to an operand, where both have already been evaluated.
+We re-define the `base-apply` function to handle an operator that is a number and delegate to the old `base-apply` function otherwise.
+</p>
 <div class="live" id="lib-multn" data-lib="black">
   (let ((original-base-apply base-apply))
   (set! base-apply
@@ -90,6 +110,12 @@ black
 </div>
 
 <h3>break.blk</h3>
+<p>For the inspector, we define a special form inspect by changing the eval-application meta function to handle the case.
+  <br/>
+  The evaluation of the inspect form starts a loop with the closure environment as the running environment.
+  <br/>
+  The loop function defines a REPL without needing to exit, since that is handled by the meta continuation.
+</p>
 <div class="live" id="lib-break" data-lib="black">
 (define (loop prompt env ans)
   (newline)(write ans)(newline)
