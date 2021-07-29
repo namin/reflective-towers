@@ -3,6 +3,14 @@
 {% block title %}Reflective Towers of Interpreters{% endblock %}
 
 {% block content %}
+cp draft/in<h2>Introduction</h2>
+
+<p>Imagine a language where you can change the meaning of any program, and the meaning of the meaning, and the meaning of the meaning of the meaning, ad infinitum — as the program is running. Reflective towers of interpreters provide that.</p>
+
+<p>Initiated in the 80s by Brian Cantwell Smith, reflective towers of interpreters are a semantic model of reflection (the ability to reason and act upon oneself), with a user level interpreted by a meta level interpreted by a meta meta level interpreted by a meta meta meta level and so on for potential infinity. Each level comes with its own REPL and ‘PC counter’, as each level can be thought of as a little interactive machine causally connected with the others. Each level (e.g. user) can reify its program into data at the level above (e.g. meta), and each level above can reflect data back into program at the level below. To explain the causally connected levels, Brian Cantwell Smith draws an analogy: “it is as  if we were creating a magic kingdom, where from a cake you could automatically get a recipe, and from a recipe you could automatically get a cake.”</p>
+
+<p>Reflective towers of interpreters include 3-Lisp (B.C. Smith, early 80s), Brown (M. Wand & D.P. Friedman, 1986), Blond (O. Danvy & K. Malmkjaer, 1988), Black (K. Asai et al., 1996) and Pink and Purple (N. Amin & T. Rompf, 2018). Based on denotational semantics, Brown features first-class reifiers, which are a generalization of FEXPRs that also reify the continuation. Also based on denotational semantics, Blond has a uniform language at each level and focuses on tower manipulation for example permuting two levels. In Black, the interpreter at each meta level can be mutated piece-wise, for example the evaluation of variables can be redefined. Pink and Purple demonstrate that it is possible to “collapse” a tower, that is compile it without interpretive overhead with respect to the current semantics. We will see examples mostly in Black and one in Blond. Implementations and examples of Brown, Blond and Black are available online, as well as those of Pink and Purple.</p>
+
 <h2><a id="black-walkthrough"></a>Black Walkthrough: Debugging</h2>
 
 <div class="live" id="black" data-lib="">
