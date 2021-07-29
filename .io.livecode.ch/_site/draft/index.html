@@ -151,6 +151,26 @@ We re-define the `base-apply` function to handle an operator that is a number an
 		  (original-eval-application exp env cont))))))
 </div>
 
+<h2>Example: Instrumentation</h2>
+
+<p>We can modify the interpreter so that it instruments a program in custom ways.<br/>
+For example, we can implement an instrumenter specific to There and Back Again (TABA) programs, to visualize the process as it pushes and pops the stack.</p>
+<pre>
+    (walk (1 2 3))            (((1 . c) (2 . b) (3 . a)))
+    |                         ^                         
+    V                         |                         
+    (walk (2 3))              (((2 . b) (3 . a)) c)     
+    |                         ^                         
+    V                         |                         
+    (walk (3))                (((3 . a)) b c)           
+    |                         ^                         
+    V                         |                         
+    (walk ())                 (() a b c)                
+    |                         ^                         
+    V                         |                         
+    ---------------------------
+</pre>
+
 <h2><a id="blond-walkthrough"></a>Blond Walkthrough: Tower Semantic Pitfalls</h2>
 
 <div class="live" id="blond" data-lib="">
