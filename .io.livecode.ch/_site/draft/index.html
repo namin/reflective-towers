@@ -175,7 +175,11 @@ For example, we can implement an instrumenter specific to There and Back Again (
 We can implement a meta-level undo by changing the `eval-set!` function in the meta meta level.</p>
 
 <h2><a id="blond-walkthrough"></a>Blond Walkthrough: Tower Semantic Pitfalls</h2>
-
+<p>The reflective tower Blond strives the most to clarify semantics.
+Continuations in the tower can be pushy or jumpy, depending on whether they stack a meta continuation or not.
+Blond is jumpy by default, while Brown and Black are pushy.
+It is possible to convert a continuation from one style to another, as described in the Blond paper.
+We start a Blond session, and load the definitions of `pushify` and `jumpify` as well as `exit`, which allows us to exit the current level to the meta level.</p>
 <div class="live" id="blond" data-lib="">
 blond
 
@@ -186,6 +190,13 @@ blond
   (load "exit.bl")
 </div>
 
+<p>Now we use a delta reifier to jump to the meta level with the current expression e, environment r and continuation k.<br/>
+The body of the `delta` reifier is executed at the meta level.
+  In that body, we define `re-enter` to save the reified continuation in a pushy way.<br/>
+We use a pushy continuation so that we reinstall level 1 before going back to level 0.<br/>
+  We also define a `jump` function at the level below, using `meaning'` which serves as evaluation. In order to access the continuation, we extend the environment. Note that here we don't `pushify` the continuation, because we want to stay at the same level when invoking `jump`.<br/>
+Because evaluation uses k as the continuation, we resume back to the level 0.
+</p>
 <div class="live" id="t2" data-lib="blond t1">
 ((delta (e r k)
    (begin
@@ -195,11 +206,13 @@ blond
                k))))
 </div>
 
+<p>Now we can exit to the meta level, and we have a way of coming back to the user level.</p>
 <div class="live" id="t4" data-lib="blond t1 t2">
   (exit 'up)
   (re-enter 'ok)
 </div>
 
+<p>Notice that we enter back to the same counter (0-4>)!</p>
 <div class="live" id="t5" data-lib="blond t1 t2 t4">
   1
   2
@@ -208,6 +221,7 @@ blond
   (re-enter 'ok)
 </div>
 
+<p>We can also use our defined jump to go "back in time" in a similar way.</p>
 <div class="live" id="t6" data-lib="blond t1 t2 t4 t5">
   1
   2
@@ -215,10 +229,13 @@ blond
   (jump 'ok)
 </div>
 
+<p>Let's go to level 1.</p>
 <div class="live" id="t7" data-lib="blond t1 t2 t4 t5 t6">
   (exit 'up)
 </div>
 
+<p>What if we want to re-enter level 0 from a level above 1? We can install a `re-enter` at a level above, assuming it is installed at the level below.
+From the level below:</p>
 <div class="live" id="t3" data-lib="blond t1 t2 t4 t5 t6 t7">
 ((delta (e r k)
    (define re-enter
@@ -230,10 +247,12 @@ blond
 ;; previous code again
 </div>
 
+<p>Now we can jump all the way back to level 0:</p>
 <div class="live" id="t9" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8">
   (re-enter 'ok)
 </div>
 
+<p>And let's make sure our tower still has the proper shape:</p>
 <div class="live" id="t10" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8 t9">
   (exit 'up)
   (exit 'up)
