@@ -11,6 +11,21 @@
 
 <p>Reflective towers of interpreters include 3-Lisp (B.C. Smith, early 80s), Brown (M. Wand & D.P. Friedman, 1986), Blond (O. Danvy & K. Malmkjaer, 1988), Black (K. Asai et al., 1996) and Pink and Purple (N. Amin & T. Rompf, 2018). Based on denotational semantics, Brown features first-class reifiers, which are a generalization of FEXPRs that also reify the continuation. Also based on denotational semantics, Blond has a uniform language at each level and focuses on tower manipulation for example permuting two levels. In Black, the interpreter at each meta level can be mutated piece-wise, for example the evaluation of variables can be redefined. Pink and Purple demonstrate that it is possible to “collapse” a tower, that is compile it without interpretive overhead with respect to the current semantics. We will see examples mostly in Black and one in Blond. Implementations and examples of Brown, Blond and Black are available online, as well as those of Pink and Purple.</p>
 
+
+<h2>Design Considerations</h2>
+
+<p>Reflective towers of interpreters capture the essence of reflection.
+We consider the design choices mostly common to all reflective towers.</p>
+<ul>
+<li>reification / reflection: reification turns a running program into data that represents it (expression, environment, continuation) while reflection reinstates the data into a running program.</li>
+<li>up / down: a level is interpreted by the meta level above (so the user level is interpreted by the meta level, and the meta level is interpreted by the meta meta level, and so on...). In a reflective tower, reification goes up the tower while reflection goes down. A reflective tower always has a vantage point.</li>
+<li>the tower is conceptually infinite: each level has a meta level. However, the tower can be fully realized by dynamically defaulting above an unmodified level. A meta continuation is a stream of (environment, continuation) pairs representing the potentially infinite tower.</li>
+<li>semantics and modified semantics: after a running program is reified, it can be inspected and manipulated and reflected back in many ways. One can write a custom evaluator, or one can transform the program text (expression) and use the default evaluator. In Black, one can change the evaluator piece-wise (for example, only changing the evaluation of variables).</li>
+<li>interactivity: each level has a REPL, and one can go up and down the tower in the REPLs.</li>
+<li>the tower structure: the tower structure is not all that fixed. In Blond, one can permute levels for example.</li>
+<li>causal connection.</li>
+</ul>
+
 <h2><a id="black-walkthrough"></a>Black Walkthrough: Debugging</h2>
 
 <div class="live" id="black" data-lib="">
