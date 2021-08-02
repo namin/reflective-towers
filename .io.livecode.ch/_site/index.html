@@ -3,171 +3,42 @@
 {% block title %}Reflective Towers of Interpreters{% endblock %}
 
 {% block content %}
-<h2><a id="black-walkthrough"></a>Black Walkthrough: Debugging</h2>
 
-<div class="live" id="black" data-lib="">
+<ul>
+  <li><a href="black">Black<a></li>
+  <li><a href="blond">Blond</a></li>
+</ul>
+
+<h2>Editor</h2>
+
+One of <code>black</code>, <code>blond</code> or <code>brown</code>.
+<div class="live" id="lib" data-lib="">
 black
 
 </div>
 
-<div class="live" id="s1" data-lib="black">
-  (define foo (lambda (f) (lambda (x) (lambda () (f (+ x 1))))))
-  (define thunk ((foo 1) 2))
-  (thunk)
-</div>
+<div class="live" id="play" data-lib="lib">
 
-<div class="live" id="s2" data-lib="black s1">
-  (old-cont 'ok)
-</div>
 
-<div class="live" id="s3-1" data-lib="black s1 s2 em-open lib-break em-close">
-;;  (EM (load "break.blk"))
-</div>
 
-<div class="live" id="s3" data-lib="black s1 s2 em-open lib-break em-close s3-1">
-  (inspect thunk)
-  f
-  (set! f (lambda (x) (+ x 2)))
-  (exit 'done)
-  (thunk)
-  (thunk)
-</div>
 
-<div class="live" id="s4" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3">
-  (define thunk2 ((foo 2) 3))
-  (thunk2)
-  (old-cont 'ok)
-</div>
-<div class="live" id="s5" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close">
-  ;; (EM (load "examples/multn.blk"))
-</div>
-<div class="live" id="s6" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close s5">
-  (thunk2)
-  (1 2 3 4)
-</div>
 
-<div class="live hidden" id="em-open" data-lib="black">
-  (EM (begin
-</div>
 
-<div class="live hidden" id="em-close" data-lib="black">
-  ))
-</div>
 
-<h3>multn.blk</h3>
-<div class="live" id="lib-multn" data-lib="black">
-  (let ((original-base-apply base-apply))
-  (set! base-apply
-    (lambda (operator operand env cont)
-      (cond ((number? operator)
-             (base-eval (cons '* (cons operator operand)) env cont))
-            (else
-             (original-base-apply operator operand env cont))))))
+
+
+
+
+
+
+
+
+
+
 
 </div>
 
-<h3>break.blk</h3>
-<div class="live" id="lib-break" data-lib="black">
-(define (loop prompt env ans)
-  (newline)(write ans)(newline)
-  (display prompt)(display "> ")
-  (base-eval (read) env (lambda (ans) (loop prompt env ans))))
+<p>Happy Happy Joy Joy!</p>
 
-(define (eval-break pred env cont)
-  (define (run-break-loop)
-     (let ((result (loop "break" env 'break-loop)))
-	(write 'break-end)(newline)
-	(cont result)))
-  (if (null? pred)
-      (run-break-loop)
-      (base-eval (car pred) env
-		 (lambda (pred) (if pred (run-break-loop)
-					 (cont #f))))))
-
-(define (eval-inspect closure env cont)
-  (base-eval closure env (lambda (closure)
-  (let ((lambda-env (car (cdr (cdr (cdr closure))))))
-   (let ((result (loop "inspect" lambda-env 'inspect-loop)))
-      (newline)(write 'inspect-end)(newline)
-      (cont result))))))
-
-(let ((original-eval-application eval-application))
-  (set! eval-application
-	(lambda (exp env cont)
-	   (cond ((eq? (car exp) 'break)
-		  (eval-break (cdr exp) env cont))
-		 ((eq? (car exp) 'inspect)
-		  (eval-inspect (car (cdr exp)) env cont))
-		 (else
-		  (original-eval-application exp env cont))))))
-</div>
-
-<h2><a id="blond-walkthrough"></a>Blond Walkthrough: Tower Semantic Pitfalls</h2>
-
-<div class="live" id="blond" data-lib="">
-blond
-
-</div>
-
-<div class="live" id="t1" data-lib="blond">
-  (load "cont.bl")
-  (load "exit.bl")
-</div>
-
-<div class="live" id="t2" data-lib="blond t1">
-((delta (e r k)
-   (begin
-     (define re-enter (pushify k))
-     (meaning' (define jump k)
-               (extend-reified-environment' (k) (list k) r)
-               k))))
-</div>
-
-<div class="live" id="t4" data-lib="blond t1 t2">
-  (exit 'up)
-  (re-enter 'ok)
-</div>
-
-<div class="live" id="t5" data-lib="blond t1 t2 t4">
-  1
-  2
-  3
-  (exit 'up)
-  (re-enter 'ok)
-</div>
-
-<div class="live" id="t6" data-lib="blond t1 t2 t4 t5">
-  1
-  2
-  3
-  (jump 'ok)
-</div>
-
-<div class="live" id="t7" data-lib="blond t1 t2 t4 t5 t6">
-  (exit 'up)
-</div>
-
-<div class="live" id="t3" data-lib="blond t1 t2 t4 t5 t6 t7">
-((delta (e r k)
-   (define re-enter
-     (lambda (v)
-       ((pushify k) ((r 're-enter) v))))))
-</div>
-
-<div class="live" id="t8" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3">
-;; previous code again
-</div>
-
-<div class="live" id="t9" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8">
-  (re-enter 'ok)
-</div>
-
-<div class="live" id="t10" data-lib="blond t1 t2 t4 t5 t6 t7 t3 t3 t8 t9">
-  (exit 'up)
-  (exit 'up)
-  (exit 'up)
-  (exit 'up)
-  (exit 'up)
-</div>
 
 {% endblock %}
