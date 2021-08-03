@@ -21,7 +21,7 @@ black
 </div>
 
 <div class="live" id="s3-1" data-lib="black s1 s2 em-open lib-break em-close">
-;;  (EM (load "break.blk"))
+;;  (exec-at-metalevel (load "break.blk"))
 </div>
 
 <div class="live" id="s3" data-lib="black s1 s2 em-open lib-break em-close s3-1">
@@ -39,7 +39,7 @@ black
   (old-cont 'ok)
 </div>
 <div class="live" id="s5" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close">
-  ;; (EM (load "examples/multn.blk"))
+  ;; (exec-at-metalevel (load "examples/multn.blk"))
 </div>
 <div class="live" id="s6" data-lib="black s1 s2 em-open lib-break em-close s3-1 s3 s4 em-open lib-multn em-close s5">
   (thunk2)
@@ -47,7 +47,7 @@ black
 </div>
 
 <div class="live hidden" id="em-open" data-lib="black">
-  (EM (begin
+  (exec-at-metalevel (begin
 </div>
 
 <div class="live hidden" id="em-close" data-lib="black">
@@ -105,7 +105,7 @@ black
 <h2>Example: Instrumentation</h2>
 
 <div class="live" id="i1" data-lib="black">
-  (EM (load "examples/taba.blk"))
+  (exec-at-metalevel (load "examples/taba.blk"))
   (load "examples/cnv.scm")
   (taba (cnv walk) (cnv '(1 2 3) '(a b c)))
 </div>
@@ -113,15 +113,15 @@ black
 <h2>Example: Meta-Level Undo</h2>
 
 <div class="live" id="u1" data-lib="black">
-  (load "examples/undo.blk")
-  (EM (define old-eval-var eval-var))
-  (EM (set! eval-var (lambda (e r k) (if (eq? e 'n) (k 0) (old-eval-var e r k)))))
+  (exec-at-metalevel (load "examples/undo.blk"))
+  (exec-at-metalevel (define old-eval-var eval-var))
+  (exec-at-metalevel (set! eval-var (lambda (e r k) (if (eq? e 'n) (k 0) (old-eval-var e r k)))))
   (define n 1)
   n
-  (EM (eq? old-eval-var eval-var))
-  (EM (undo!))
+  (exec-at-metalevel (eq? old-eval-var eval-var))
+  (exec-at-metalevel (undo!))
   n
-  (EM (eq? old-eval-var eval-var))
+  (exec-at-metalevel (eq? old-eval-var eval-var))
 </div>
 
 {% endblock %}
