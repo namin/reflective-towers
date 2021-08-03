@@ -12,7 +12,7 @@ black
 
 <div class="live" id="s1" data-lib="black">
   (define foo (lambda (f) (lambda (x) (lambda () (f (+ x 1))))))
-  (define thunk ((foo 1) 2))
+  (define thunk ((foo 2) 3))
   (thunk)
 </div>
 
@@ -27,7 +27,7 @@ black
 <div class="live" id="s3" data-lib="black s1 s2 em-open lib-break em-close s3-1">
   (inspect thunk)
   f
-  (set! f (lambda (x) (+ x 2)))
+  (set! f (lambda (x) (* 2 x)))
   (exit 'done)
   (thunk)
   (thunk)
