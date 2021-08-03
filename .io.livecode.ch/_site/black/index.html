@@ -102,4 +102,12 @@ black
 		  (original-eval-application exp env cont))))))
 </div>
 
+<h2>Example: Instrumentation</h2>
+
+<div class="live" id="i1" data-lib="black">
+  (EM (load "examples/taba.blk"))
+  (load "examples/cnv.scm")
+  (taba (cnv walk) (cnv '(1 2 3) '(a b c)))
+</div>
+
 {% endblock %}
