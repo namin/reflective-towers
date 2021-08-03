@@ -112,7 +112,7 @@ black
 
 <h2>Example: Meta-Level Undo</h2>
 
-<div class="live" id="i1" data-lib="black">
+<div class="live" id="u1" data-lib="black">
   (load "examples/undo.blk")
   (EM (define old-eval-var eval-var))
   (EM (set! eval-var (lambda (e r k) (if (eq? e 'n) (k 0) (old-eval-var e r k)))))
