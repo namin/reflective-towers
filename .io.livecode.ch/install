@@ -3,7 +3,7 @@ set -e
 
 git clone https://github.com/namin/black.git
 cd black
-git checkout play
+git checkout blog
 cd ..
 
 git clone https://github.com/namin/blond.git
