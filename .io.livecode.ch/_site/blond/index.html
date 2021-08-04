@@ -72,4 +72,21 @@ blond
   (exit 'up)
 </div>
 
+<h3>Exercises</h3>
+
+<ul>
+  <li>Try changing the definition of level 1 re-enter to not pushify. That is, instead of<br>
+    <code>(define re-enter (pushify k))</code><br>
+    remove a <code>pushify</code><br>
+    <code>(define re-enter k)</code><br>
+    What goes wrong? Level 1 is lost.
+  </li>
+  <li>Try changing the continuation at the same level, <code>jump</code>, to be pushy. That is, instead of<br>
+    <code>(extend-reified-environment' (k) (list k) r)</code><br>
+    add a <code>pushify</code><br>
+    <code>(extend-reified-environment' (k) (list (pushify k)) r)</code><br>
+    What goes wrong? We add an extra level 0.
+    </li>
+</ul>
+
 {% endblock %}
