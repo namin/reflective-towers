@@ -66,23 +66,12 @@ black
 
 </div>
 
-<h3><a name="break"></a>break.blk</h3>
+<h3><a name="break"></a>break.blk (relevant excerpt)</h3>
 <div class="live" id="lib-break" data-lib="black">
 (define (loop prompt env ans)
   (newline)(write ans)(newline)
   (display prompt)(display "> ")
   (base-eval (read) env (lambda (ans) (loop prompt env ans))))
-
-(define (eval-break pred env cont)
-  (define (run-break-loop)
-     (let ((result (loop "break" env 'break-loop)))
-	(write 'break-end)(newline)
-	(cont result)))
-  (if (null? pred)
-      (run-break-loop)
-      (base-eval (car pred) env
-		 (lambda (pred) (if pred (run-break-loop)
-					 (cont #f))))))
 
 (define (eval-inspect closure env cont)
   (base-eval closure env (lambda (closure)
@@ -94,12 +83,11 @@ black
 (let ((original-eval-application eval-application))
   (set! eval-application
 	(lambda (exp env cont)
-	   (cond ((eq? (car exp) 'break)
-		  (eval-break (cdr exp) env cont))
-		 ((eq? (car exp) 'inspect)
-		  (eval-inspect (car (cdr exp)) env cont))
-		 (else
-		  (original-eval-application exp env cont))))))
+	   (cond
+             ((eq? (car exp) 'inspect)
+              (eval-inspect (car (cdr exp)) env cont))
+             (else
+              (original-eval-application exp env cont))))))
 </div>
 
 <h2>Example: Instrumentation</h2>
